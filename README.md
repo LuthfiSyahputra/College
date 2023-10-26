@@ -1,2 +1,2 @@
 # College
- Repository for archiving my Academic Milestones
+ Repository for Archiving my Academic Milestones
