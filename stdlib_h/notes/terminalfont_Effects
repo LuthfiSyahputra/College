@@ -1,0 +1,135 @@
+
+Every Terminal Manipulation Based on Standard Terminal UART have to start with
+"<esc>["
+"[27]["
+"\033["
+"\x1B["
+followed by valid code sequence
+
+"<esc>[<code><mode>" - Use case 
+"<esc>[<code>;<code2>;<...><mode>" - Multiple code in the same mode
+
+# <mode>
+A - Move Cursor Up
+B - Move Cursor Down
+C - Move Cursor Forward
+D - Move Cursor Backward
+f - Move Cursor
+H - Move Cursor
+J - Clear Screen
+K - Clear Line
+m - Font Effects
+s - Save Cursor Position
+u - Restore Cursor Position
+
+## <code> or <parameter>
+There can only be 1 <mode> per Esc key (27)(033)(0x1B)
+Use of multiple <code> or <parameter> is allowed in the same <mode> (separated by semicolon ';')
+
+### FONT EFFECTS
+[m] - <code>;<...>
+"\033[0m" - To reset or revert effect back to default
+
+Code	| Effect	                        Note
+0       | Reset / Normal	            all attributes off
+1       | Bold or increased intensity	
+2       | Faint (decreased intensity)   Not widely supported.
+3       | Italic                        Not widely supported. Sometimes treated as inverse.
+4       | Underline	
+5       | Slow Blink	                less than 150 per minute
+6       | Rapid Blink	                MS-DOS ANSI.SYS; 150+ per minute; not widely supported
+7       | [[reverse video]]	            swap foreground and background colors
+8       | Conceal	                    Not widely supported.
+9       | Crossed-out	                Characters legible, but marked for deletion. Not widely supported.
+
+10      | Primary(default) font	
+11–19	| Alternate font	            Select alternate font n-10
+
+20      | Fraktur	                    hardly ever supported
+21      | Bold off or Double Underline	Bold off not widely supported; double underline hardly ever supported.
+22      | Normal color or intensity	    Neither bold nor faint
+23      | Not italic, not Fraktur	
+24      | Underline off	                Not singly or doubly underlined
+25      | Blink off	
+27      | Inverse off	
+28      | Reveal	conceal off
+29      | Not crossed out	
+
+30–37	| Set foreground color	        See color table below
+38	    | Set foreground color	        Next arguments are 5;<n> or 2;<r>;<g>;<b>, see below
+39	    | Default foreground color	    implementation defined (according to standard)
+40–47	| Set background color	        See color table below
+48	    | Set background color	        Next arguments are 5;<n> or 2;<r>;<g>;<b>, see below
+49	    | Default background color      implementation defined (according to standard)
+
+51	    | Framed	
+52	    | Encircled	
+53	    | Overlined	
+54	    | Not framed or encircled	
+55	    | Not overlined	
+
+60	    | ideogram underline	        hardly ever supported
+61	    | ideogram double underline	    hardly ever supported
+62	    | ideogram overline	            hardly ever supported
+63	    | ideogram double overline	    hardly ever supported
+64	    | ideogram stress marking	    hardly ever supported
+65	    | ideogram attributes off	    reset the effects of all of 60-64
+
+90–97	| Set bright foreground color	aixterm (not in standard)
+100–107	| Set bright background color	aixterm (not in standard)
+
+### MISC
+> MOVE CURSOR 1D
+[A] [B] [C] [D] - (from current Cursor Position)
+<ntimes><Move Cursor mode>
+
+> MOVE CURSOR 2D
+[f] [H] - (Absolute Position)
+<Line>;<Column><Move Cursor mode>
+
+> CLEAR LINE
+[K] - <Parameter>K
+<null> - Erase forward
+<2>    - Erase forward and backward (Clear line)
+
+> CLEAR SCREEN
+[J] - <Parameter>J
+<null> - Erase forward
+<2>    - Erase forward and backward (Clear Screen)
+
+# Special Control Characters
+'\r' - [10] [0xA] [012] Return Key (move cursor to start of the line)
+'\n' - [32] Newline Key (Start a Newline)
+'\t' -  Tab Key
+
+# EXAMPLE
+print "\\033[XXm"
+
+for i in range(30,37+1):
+    print "\033[%dm%d\t\t\033[%dm%d" % (i,i,i+60,i+60);
+
+"\033[39m\033[49m - Reset colour
+
+puts the cursor at line L and column C
+"\033[<L>;<C>H"
+"\033[<L>;<C>f"
+
+"\033[H"    Move the cursor to {0,0}
+"\033[<N>A" Move the cursor up N lines
+"\033[<N>B" Move the cursor down N lines
+"\033[<N>C" Move the cursor forward N columns
+"\033[<N>D" Move the cursor backward N columns
+
+"\033[2J"   Clear the screen, [move to (0,0)]
+"\033[2K"   Clear Line
+"\033[J"    Erase to end of screen
+"\033[K"    Erase to end of line
+
+"\033[s"    Save cursor position
+"\033[u"    Restore cursor position
+
+"\033[4m"   Underline on
+"\033[24m"  Underline off
+"\033[1m"   Bold on
+"\033[21m"  Bold off
+"\033[0m"   Reset effect

@@ -1,0 +1,210 @@
+# MANUAL
+> https://www.bell-labs.com/usr/dmr/www/manintro.html
+> https://unix.stackexchange.com/questions/3586/what-do-the-numbers-in-a-man-page-mean
+
+# HIERARCHY OF THE FUNCTIONS
+- [A] USER
+- [B] IMPLEMENTATION
+- [C] SYSTEM
+- [D] CORE
+    > [D-0] Assembly / Binary Implementations
+    > [D-1] Standard Functions (STD_AVAILABLE)
+    > [D-2] Original Functions
+    > [D-3] Aid from [0] or [D-0] [D-1] 
+
+- [0] STANDARD FUNCTIONS
+
+## CORE_H
+Independent to any functions (sometimes re-implementing standard functions)
+Core (lowest level) Fundamental Building Block
+
+- MEMORY MANAGEMENT
+    [D-1] bool memcmp_h()   {memcmp()}
+    [D-2] bool memcmp_t()
+
+    [D-1] int memcmp_hl() {memicmp()}
+
+    [D-1] ptr memseek() {memchr()}
+            BYTE ptr memseek_b()
+            WORD ptr memseek_w()
+            DWORD ptr memseek_dw()
+            QWORD ptr memseek_qw()
+    
+    [D-2] ptr memseek_t()
+    [D-2] ptr memseek_st()
+
+    [D-1] ptr memcpy_h()    {memcpy()}
+    [D-2] ptr memcpy_t()
+    [D-1] int memcpy_hs()   {memmove()}
+    [D-2] int memcpy_ts()
+
+    [D-1] int memccpy_h()   {memccpy()}
+    [D-1] ptr mempcpy_h()   {mempcpy()}
+    [D-2] int memccpy_t()   Stops after sequences of bytes
+
+    [D-3] ptr memmove_h()
+    [D-3] ptr memmove_s()
+
+    [D-1] ptr memreset()    {memset( 0 )}
+
+
+- STRING MANAGEMENT {DEPENDENT ON MEMORY MANAGEMENT}
+    [D-1] int strlen_h()
+
+    CHARACTER SEEK {cfind()}
+    [D-1] int chseek() {strspn()}
+    [D-1] ptr chseek_p {strchr()}
+    [D-2] int chseek_s()
+    [D-1] int chrseek() {strrspn()}
+    [D-1] ptr chrseek_p {strrchr()}
+    [D-2] int chrseek_s()
+
+    MULTI-CHARACTER SEEK
+
+
+    CASE SENSITIVE COMPARE
+    [D-1] bool strcmp_h()
+            exbool strcmp_ha()
+            int strcmp_l()
+            ptr strcmp_p()
+
+    CASE INSENSITIVE COMPARE
+    [D-1] bool strcasecmp_h()
+            exbool strcasecmp_ha()
+            int strcasecmp_l()
+            ptr strcasecmp_p()
+
+    STRING CONCAT
+    [D-1] int strcat_h()
+    [D-1] int strcat_hs()
+    [D-1] int strncat_h()
+    [D-1] int strncat_hs()
+
+    STRING COPY
+    [D-1] int strcpy_h()
+    [D-1] int strcpy_hs()
+    [D-1] int strncpy_h()
+    [D-1] int strncpy_hs()
+
+    STRING MOVE
+    [D-2] int strmov()
+    [D-2] int strmov_s()
+    [D-2] int strnmov()
+    [D-2] int strnmov_s()
+
+    STRING DUPLICATE
+    [D-1] ptr strdup_h()
+    [D-1] ptr strndup_h()
+
+    STRING REVERSE
+    [D-1] int strrev_h() {strrev()}
+    [D-2] int strcrev()  (Reverse from the first c character)
+    [D-2] int strnrev()
+
+    STRING CASE
+    [D-1] int strlwr_h() {strlwr()}
+    [D-1] int strupr_h() {strupr()}
+    [D-2] int strnlwr()
+    [D-2] int strnupr()
+
+    STRING TOKENIZATION
+    [D-1] ptr strtok_h() {strtok()}
+    [D-1] ptr strtok_hs() {strtok_s()} (Thread safe tokenization)
+
+    SUB-STRING MANTIPULATION
+    [D-1] ptr strstr_h() {strstr()} (Search first occurence of sub-string)
+            int strstr_l()
+    [D-2] ptr strnstr()
+            int strnstr_l()
+    
+    [D-2] int strstr_ht()  collect the location of sub-string in an array
+    [D-2] int strnstr_t()
+
+
+
+- MEMORY MANAGEMENT (EX)
+    [D-3] ptr memswap() {calloc()}
+    [D-3] void memfree()
+
+- BASIC IO
+
+- STRING MANAGEMENT (EX)
+
+- TIME & CLOCK
+
+- MISC
+    [D-1] bool *cmpfunc()
+
+
+## SYSTEM_H
+
+
+# DATATYPE HIERARCHIES
+
+- [A] USER DATA TYPES
+- [B] IMPLEMENTATION
+- [C] SYSTEM
+- [D] CORE 
+- [E] STANDARD DATA TYPES
+    [E-1] CORE
+    [E-2] STD (Derived Data types)
+    [E-3] PLATFORM IMPLEMENTATION DEFINED
+
+- [0] FUNDAMENTAL / PRIMITIVE DATA TYPES
+    [0-A] STANDARD
+    [0-B] EXTENDED (Extended CPU Instruction / Registers)
+
+## PRIMITIVE DATA TYPES [0]
+
+Sorted by Standard Implicit type conversion order (highest to lowest)
+- Floating-Point
+    long double        [128 / 16]
+    double             [64 / 8]
+    float              [32 / 4]
+
+- Integers
+    unsigned long long [64 / 8]
+    (signed) long long [64 / 8]
+    unsigned long      [32 / 4]
+    (signed) long      [32 / 4]
+
+    unsigned int       [System Specific]
+    (signed) int       [System Specific]
+
+    unsigned short     [16 / 2]
+    (signed) short     [16 / 2]
+    unsigned char      [ 8 / 1]
+    (signed) char      [ 8 / 1]
+
+- Pointer
+    <type*>            [System Specific on Memory Register]
+
+    void*  (General Address / Multi-Purpose Pointer) (can take any pointer type, but cannot be de-referenced)
+    char*  (Also called a string Pointer)
+
+    <restrict> ( -- )
+    <register>
+
+- General Purpose Register (asm)
+    |                            r*x [64]                           |
+    |                               |            e*x [32]           |
+    |                                               |     *x [16]   |
+    |                                               |  *h   |   *l  |
+
+    The Register List:
+    - a
+
+### EXTENDED PRIMITIVE [0-B]
+Usually by Extended Instruction and Registers on CPU
+for Implementing Multi-Calculations on data to achieve Parallel-Computing
+Maximizing Efficiency by calculating multiple data at once
+
+Part of SSE (Short Streaming SIMD Extension)
+
+- Extended Registers
+    Different from General-Purpose Registers, these register can only be used to 
+    calculate specific data and can not be used for addressing memory
+
+    XMM [128] (Usually used for calculating floating-point type no matter the size)
+    YMM [256]
+    ZMM [512]
