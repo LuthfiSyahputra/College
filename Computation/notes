@@ -1,0 +1,50 @@
+JOB SEEKING PROGRAM
+
+#  USER
+- Account
+- Security and privacy
+- log in and out
+
+# UI
+- Display the menu
+- Display the job
+
+# SYSTEM
+- Find possible Job
+- Give Recommendations
+- Divide jobs by a specific type
+- Publish and remove proposal
+- Integrated Private chat
+
+
+# CORE
+- Sort
+- Data Matching
+
+
+# DATA STRUCTURE
+
+o User Data Structure
+- Name
+- Birthday
+- Gender
+- National Region
+- Domicile
+- Address
+- Email
+- Contact
+- Family or relation contact
+- Education
+- Description
+
+> Professional Details
+- Job Title
+- Job Description
+- Experience
+- Job Location (Domicile)
+- Job Type
+- Address
+- Contact Person
+- Professional Email
+- Salary
+- Others

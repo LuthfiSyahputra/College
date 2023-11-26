@@ -45,6 +45,7 @@ typedef struct job_postings_str {
 typedef struct user_property {
     char* name;
     int age;
+    int gender;
     int domicile;
     char* address;
 

@@ -1,18 +1,18 @@
 # Define a list of job postings
 job_postings = [
-    {"title": "Software Engineer", "location": "Bandung", "type": "Full-time"},
-    {"title": "Data Analyst", "location": "Jakarta", "type": "Part-time"},
-    {"title": "Project Engineer", "location": "Surabaya", "type": "Full-time"},
-    {"title": "Sector Manufactur", "location": "Solo", "type": "Contract"},
-    {"title": "Electrical Design Engineer", "location": "Serang", "type": "Contract"},
-    {"title": "Telecommunication Engineer", "location": "Jatinangor", "type": "Contract"},
-    {"title": "Power Systems Engineer", "location": "Jatinangor", "type": "Contract"},
-    {"title": "Quality Assurance & Quality Control", "location": "Jatinangor", "type": "Contract"},
-    {"title": "Consultant", "location": "Jatinangor", "type": "Contract"},
-    {"title": "Machine Learning Engineer", "location": "Jatinangor", "type": "Contract"},
-    {"title": "Robotics Engineer", "location": "Jatinangor", "type": "Contract"},
-    {"title": "Research and Development", "location": "Jatinangor", "type": "Contract"},
-    {"title": "Telecommunication Engineer", "location": "Jatinangor", "type": "Contract"},
+    {"title": "Software Engineer"                   , "location": "Bandung"     , "type": "Full-time"},
+    {"title": "Data Analyst"                        , "location": "Jakarta"     , "type": "Part-time"},
+    {"title": "Project Engineer"                    , "location": "Surabaya"    , "type": "Full-time"},
+    {"title": "Sector Manufactur"                   , "location": "Solo"        , "type": "Contract"},
+    {"title": "Electrical Design Engineer"          , "location": "Serang"      , "type": "Contract"},
+    {"title": "Telecommunication Engineer"          , "location": "Jatinangor"  , "type": "Contract"},
+    {"title": "Power Systems Engineer"              , "location": "Jatinangor"  , "type": "Contract"},
+    {"title": "Quality Assurance & Quality Control" , "location": "Jatinangor"  , "type": "Contract"},
+    {"title": "Consultant"                          , "location": "Jatinangor"  , "type": "Contract"},
+    {"title": "Machine Learning Engineer"           , "location": "Jatinangor"  , "type": "Contract"},
+    {"title": "Robotics Engineer"                   , "location": "Jatinangor"  , "type": "Contract"},
+    {"title": "Research and Development"            , "location": "Jatinangor"  , "type": "Contract"},
+    {"title": "Telecommunication Engineer"          , "location": "Jatinangor"  , "type": "Contract"},
     ]
 
 # Function to display job postings based on user's preferences
