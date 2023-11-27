@@ -237,26 +237,14 @@ def _isblank(c):
 
 
 a = csv("data")
-
-
-# print(a.buf)
-# print(a._token.nexttoken(";\n", a.buf))
-
-# print(a._line.getnline(a.buf, 3))
-# print(a._line.nextline())
-
-# a.delimiter = ";"
-
-# row = a.getrow(5)
-# print(str(row) + "  rowlen: " + str(len(row)))
 a.delimiter = ";"
-# for i in range(0, 7):
-#     print(a.getrow(i))
 
 print(a.getDataAttribute())
 
-print(a.datatype)
+row = [(a.nextrow()) for i in range(1, a._nline)]
+print(row, "\n\n\n")
 
-# print("()[]{}")
+for i in range(0, a._nline - 1):
+    print(row[i])
 
 
