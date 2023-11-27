@@ -1,7 +1,7 @@
 
 import math
 import sorting
-import csv
+import csv_man
 
 
 def absolute(x):

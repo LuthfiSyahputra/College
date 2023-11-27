@@ -1,6 +1,12 @@
 name (str); weight (float); height(float); age(int)
-momo momoma;   32.3;   134;  19;
- mama;   44.5;   144;  20;
-mimi yuki ;   55.1;   152;  19;
-  mumu kazuki   kuroko ;   30.5;   141;  21;
-        momomi; 41.8;   133;  18;
+1 [I] MM ; 21 ; 20;
+
+2 [V] momo momoma;   ;   134;  19;
+
+
+3 [N] HH ; 2M ; 90 ; 10 ; 290 ; 313
+
+4 [V] mama;   44.5;   144;  20;
+5 [V] mimi yuki ;   55.1;   152;  19;
+6 [V] mumu kazuki   kuroko ;   30.5;   141;  21;
+7 [V] momomi; 41.8;   133;  18;

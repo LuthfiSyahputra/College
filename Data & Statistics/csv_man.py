@@ -26,7 +26,9 @@ class Debug:
         if(isprinted == True): print(self.errCode[errcode] + " : " + note)
         return self.errCode[errcode]
     
-    def iserror(self, retval):
+    def iserror(self, retval, _errcode: int = None):
+        if(_errcode != None): return (self.errCode[_errcode] == retval)
+
         for i in range(0, len(self.errCode)):
             if (self.errCode[i] == retval): return True
         return False
@@ -120,6 +122,7 @@ class strline:
 
 class csv:
     buf = str()
+    _fptr = int()
 
     row = int()
     size = int()
@@ -127,9 +130,13 @@ class csv:
 
     ndata = int(0)
     nrow = int(0)
+    data = str()
+
+    cur_row = int(0)
 
     _token = token()
     _line = strline()
+
 
     nattribute = int(0)
     delimiter = ""
@@ -138,6 +145,7 @@ class csv:
 
     datatype = str()
     dataname = str()
+
 
     valid_datatype= [
         "str",
@@ -148,38 +156,69 @@ class csv:
     ]
 
 
-    def __init__(self, filename) -> None:
+    def __init__(self, filename, delimiter) -> None:
         self.file = open(filename, "r+")
         self.buf = self.file.read()
         self.size = self.file.tell()
         self._nline = self._line.getTotalLine(self.buf)
+        self.delimiter = delimiter
+
+        self.maindata = self.getnrow()
         
         self.file.seek(0)
         pass
 
     
-    def getrow(self, n):
+    def _getrow(self, n):
         tempstr = self._line.getnline(self.buf, n)
-        if (_globalDebug.iserror(tempstr)): return ""
+        if (_globalDebug.iserror(tempstr)): return tempstr
 
-        self.nrow = n
+        self.cur_row = n
         retval = []
         
         while(True):
             tempval = self._token.nexttoken(self.delimiter + '\n', tempstr)
-            if(tempval == _globalDebug.error(11, True, "intended for csv.getrow()")): break
+            if(tempval == _globalDebug.error(11, True, "intended for csv._getrow()")): break
             retval.append(tempval)
-
 
         return retval
     
     def nextrow(self, n:int = None):
-        if(n != None): self.nrow = n - 1
+        if(n != None): pass
 
-        self.nrow += 1
-        return self.getrow(self.nrow)
+        self.cur_row += 1
+        return self._getrow(self.cur_row)
     
+    def getnrow(self, n:int = None):
+        if (self.nattribute == 0):
+            _globalDebug.error(1, True, "csv.getnrow - attribute not defined - calling csv.getDataAttribute()")
+            self.getDataAttribute()
+
+        self.nrow = 0
+        self.data = []
+        temprow = ""
+
+        # get row
+        while(True):
+            if((n != None) and (self.nrow >= n)): break
+            
+            temprow = self.nextrow()
+
+            # iterate to the end of file
+            if(_globalDebug.iserror(temprow) == True): break
+
+
+            if(len(temprow) > 0):
+                self.data.append(
+                    _arrnewcpy(temprow,
+                    len(temprow) if (len(temprow) <= self.nattribute) else self.nattribute,
+                    self.nattribute, ""
+                    ))
+                self.nrow += 1
+
+        return self.data
     
+
     def getDataAttribute(self):
         if(self.delimiter == ""):
             _globalDebug.error(1, True, "csv.getDataAttribute() - csv.delimiter not set \"\"")
@@ -190,7 +229,7 @@ class csv:
             if(line > self._nline): 
                 return _globalDebug.error(2, True, "csv.getDataAttribute() No data in the file, nline: " + str(self._nline) + "  size: " + str(self.size))
             
-            tempstr = self.getrow(line)
+            tempstr = self._getrow(line)
             self.nattribute = len(tempstr)
             line += 1
 
@@ -219,6 +258,14 @@ class csv:
         return (self.dataname, self.datatype)
             
 
+def _arrnewcpy(arr_template, sizeof_template, nlen, init_val):
+    newarr = [init_val for i in range(0, nlen)]
+    _arrcpy(arr_template, newarr, sizeof_template)
+    return newarr
+
+def _arrcpy(_from, _to, n):
+    for i in range(0, n):
+        _to[i] = _from[i]
 
 def _chseek(c, delimiter):
     for i in range(0, len(delimiter)):
@@ -236,15 +283,7 @@ def _isblank(c):
 
 
 
-a = csv("data")
-a.delimiter = ";"
+a = csv("data", ";")
 
-print(a.getDataAttribute())
-
-row = [(a.nextrow()) for i in range(1, a._nline)]
-print(row, "\n\n\n")
-
-for i in range(0, a._nline - 1):
-    print(row[i])
-
-
+for i in range(0, len(a.maindata)):
+    print(a.maindata[i])
