@@ -31,15 +31,9 @@ def standardDeviation(X):
     return math.sqrt(variance(X))
 
 
+a = csv_man.csv("salaries.csv", ",", 1000)
+col = a.getncol(4, 1000)
 
+csv_man.strtoint(col)
 
-
-data = [2, 43, 5, 4]
-sorting.quickSort(data, 0, len(data) - 1)
-
-
-
-for i in range(0, 4):
-    print(data[i])
-# print(mean(data))
-
+print(mean(col))

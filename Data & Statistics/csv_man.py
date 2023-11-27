@@ -156,14 +156,14 @@ class csv:
     ]
 
 
-    def __init__(self, filename, delimiter) -> None:
+    def __init__(self, filename, delimiter, initrow) -> None:
         self.file = open(filename, "r+")
         self.buf = self.file.read()
         self.size = self.file.tell()
         self._nline = self._line.getTotalLine(self.buf)
         self.delimiter = delimiter
 
-        self.maindata = self.getnrow()
+        self.maindata = self.getnrow(initrow)
         
         self.file.seek(0)
         pass
@@ -218,6 +218,11 @@ class csv:
 
         return self.data
     
+    def getncol(self, col:int, n:int = None):
+        
+        retval = [self.data[i][col] for i in range(0, self.nrow)]
+        return retval
+        
 
     def getDataAttribute(self):
         if(self.delimiter == ""):
@@ -281,9 +286,7 @@ def _strseek(collection, str):
 def _isblank(c):
     return ((c == ' ') or (c == '\t') or (c == '\n'))
 
+def strtoint(arr):
+    for i in range(0, len(arr)):
+        arr[i] = int(arr[i])
 
-
-a = csv("data", ";")
-
-for i in range(0, len(a.maindata)):
-    print(a.maindata[i])
