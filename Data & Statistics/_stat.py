@@ -3,7 +3,20 @@ import math
 import matplotlib
 import os
 import pandas as pd
+import random
 
+_str_ = [
+    "work_year",
+    "salary",
+    "salary_in_usd",
+    "remote_ratio"
+]
+
+strx = "work_year"
+stry  = _str_[2]
+stry2 = _str_[2]
+
+STEPSIZE = 175
 
 def _sum(x, n) -> int:
     retval = 0
@@ -46,16 +59,16 @@ def step(min, max, n):
         
     return retval
 
-def partition(data, step, str1, str2):
+def partition(data, step, dx, countdx, str1, str2):
     
     retval = []
     retyear = []
     start = 0
-    for n in range(0, 4):
+    for n in range(0, dx):
         subpart = count[n] / step
-        start = _sum(count, n)
+        start = _sum(countdx, n)
 
-        while(start <= (_sum(count, n) + count[n])):
+        while(start <= (_sum(countdx, n) + countdx[n])):
             end = (start + subpart)
             
             if (end >= len(data[str1])): end = len(data[str1])
@@ -80,19 +93,25 @@ filesize = os.path.getsize("salaries.csv")
 
 # print(filesize)
 
+# file [["salary_in_usd"]]. plot(kind="hist",
+#                                bins = step(0, int( max(file["salary_in_usd"]) ), 300),
+#                                rwidth =0.8)
+
+
+
 # file [["salary"]]. plot(kind="hist",bins = step(0, mean(file["salary"]), 1000) , rwidth =0.8)
 # file [["remote_ratio"]]. plot(kind="hist",bins = step(0, max(file["remote_ratio"]), 21) , rwidth =0.8)
-# file [["salary_in_usd"]]. plot(kind="hist",bins = step(0, mean(file["salary_in_usd"]), 1000) , rwidth =0.8)
+# file [["salary_in_usd"]]. plot(kind="hist",bins = step(0, max(file["salary_in_usd"], 1000)) , rwidth =0.8)
 # file [["work_year"]]. plot(kind="hist",bins = step(min(file["work_year"]), max(file["work_year"]), 10) , rwidth =0.8)
 
-file = file.sort_values (["work_year"], ascending =[1])
+# print( int( max(file["salary"]) ) + 90)
+
+file = file.sort_values (["work_year"], ascending =[0])
 count = [file['work_year'].value_counts().at[i] for i in range(2020, 2024)]
 
-strx = "work_year"
-stry = "salary"
-stry2 = "salary_in_usd"
 
-stepsize = 10
+
+
 
 _tempdata = {}
 _tempdata [strx] = [0 for i in range(0, file.shape[0])]
@@ -115,10 +134,10 @@ for n in range(0, len(file[stry])):
     _tempdata[stry][n] = file[stry2][n]
 
 
-datum = partition(_tempdata, stepsize, stry, strx)
+datum = partition(_tempdata, STEPSIZE, 2023 - 2019, count, stry, strx)
 
 normalized_data = {}
-normalized_data [stry]    = [datum[0][i] for i in range(0, len(datum[0]))]
+normalized_data [stry] = [datum[0][i] for i in range(0, len(datum[0]))]
 normalized_data [strx] = [datum[1][i] for i in range(0, len(datum[1]))]
     
 
@@ -126,16 +145,62 @@ normalized_data [strx] = [datum[1][i] for i in range(0, len(datum[1]))]
 
 fnormal = pd.DataFrame(data = normalized_data)
 
-fnormal.plot(kind = "line", x = strx, y = stry)
 
-# print(tempdata[strx])
-# print(len(tempdata["salary"]))
- 
-# print(tempdata)
+# file.plot(kind = "line", x = "remote_ratio", y = "remote_ratio")
 
-# workyear = [i for i in range(0, int(2.5))]
+size = len(file["remote_ratio"])
 
-# print(workyear)
+
+
+_remote_ratio = [file["remote_ratio"][n] for n in range(0, size)]
+for i in range(0, size):
+    _remote_ratio[i] *= random.random()
+
+
+file.plot(kind="scatter", x= "work_year", y= "remote_ratio")
+
+
+
+
+
+_qnt_data = {}
+_qnt_data ["work_year"]     = fnormal["work_year"]
+_qnt_data ["remote_ratio"]  = _remote_ratio
+_qnt_data ["salary"]        = file["salary"]
+_qnt_data ["salary_in_usd"] = file["salary_in_usd"]
+qnt_data = pd.DataFrame(data = _qnt_data)
+
+_str_ = ["work_year", "salary", "salary_in_usd", "remote_ratio"]
+
+for a in range(0, len(_qnt_data)):
+    for b in range(a, len(_qnt_data)):
+        if(a == b): pass
+        else:
+            corr = file[_str_[a]].corr(file[_str_[b]])
+            qnt_data.plot(kind="scatter", x=_str_[a], y= _str_[b])
+            qnt_data.plot(kind="scatter", x=_str_[b], y= _str_[a])
+
+            if (corr > 0.5):
+                print(_str_[a] + " berbanding lurus dengan " + _str_[b])
+            elif (corr < -0.5):
+                print(_str_[a] + " berbanding terbalik dengan " + _str_[b])
+            else:
+                print(_str_[a] + " tidak berkolerasi dengan " + _str_[b])
+
+qnt_data.corr(method = "pearson")
+qnt_data.corr(method = "kendall")
+
+
+
+
+
+
+
+
+
+
+
+
 
 # file.plot(kind = "line", x = "work_year", y = "remote_ratio")
 
