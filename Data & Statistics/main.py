@@ -30,6 +30,22 @@ def variance(X):
 def standardDeviation(X):
     return math.sqrt(variance(X))
 
+def _strseek(collection, str):
+    if(len(str) == 0): return -2
+    for i in range(0, len(collection)):
+        if(collection[i] == str): return i
+    return -1
+
+def qualitative_count(data, n):
+    frequency = []
+
+    for i in range(0, n):
+        retval = _strseek(category, data[i])
+        if(retval == -1) 
+
+
+def step()
+
 
 a = csv_man.csv("salaries.csv", ",", 1000)
 col = a.getncol(4, 1000)

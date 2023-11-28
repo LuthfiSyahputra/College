@@ -1,6 +1,9 @@
+# %%
 import math
+import matplotlib
 import os
 import pandas as pd
+
 
 def _sum(x, n) -> int:
     retval = 0
@@ -54,6 +57,10 @@ def partition(data, step, str1, str2):
 
         while(start <= (_sum(count, n) + count[n])):
             end = (start + subpart)
+            
+            if (end >= len(data[str1])): end = len(data[str1])
+            if (start == end): break
+
             retval.append(mean(data[str1], int(start), int(end)))
             retyear.append(data[str2][int(start)])
        
@@ -81,11 +88,15 @@ filesize = os.path.getsize("salaries.csv")
 file = file.sort_values (["work_year"], ascending =[1])
 count = [file['work_year'].value_counts().at[i] for i in range(2020, 2024)]
 
+strx = "work_year"
+stry = "salary"
+stry2 = "salary_in_usd"
 
+stepsize = 10
 
 _tempdata = {}
-_tempdata ["work_year"] = [0 for i in range(0, file.shape[0])]
-_tempdata ["salary"]    = [0 for i in range(0, file.shape[0])]
+_tempdata [strx] = [0 for i in range(0, file.shape[0])]
+_tempdata [stry] = [0 for i in range(0, file.shape[0])]
                        
 
 
@@ -96,24 +107,28 @@ for n in range(2019, 2023):
     i = _sum(count, n - 2019)
 
     while (i < end):
-        _tempdata["work_year"][i] = year
+        _tempdata[strx][i] = year
         year += subval
         i += 1
 
-for n in range(0, len(file["salary"])):
-    _tempdata["salary"][n] = file["salary_in_usd"][n]
+for n in range(0, len(file[stry])):
+    _tempdata[stry][n] = file[stry2][n]
 
 
-datum = partition(_tempdata, 50, "salary", "work_year")
+datum = partition(_tempdata, stepsize, stry, strx)
 
 normalized_data = {}
-normalized_data ["salary"]    = [datum[0][i] for i in range(0, len(datum[0]))]
-normalized_data ["work_year"] = [datum[1][i] for i in range(0, len(datum[1]))]
+normalized_data [stry]    = [datum[0][i] for i in range(0, len(datum[0]))]
+normalized_data [strx] = [datum[1][i] for i in range(0, len(datum[1]))]
     
 
-print(normalized_data)
+# print(normalized_data)
 
-# print(tempdata["work_year"])
+fnormal = pd.DataFrame(data = normalized_data)
+
+fnormal.plot(kind = "line", x = strx, y = stry)
+
+# print(tempdata[strx])
 # print(len(tempdata["salary"]))
  
 # print(tempdata)
@@ -142,3 +157,4 @@ print(normalized_data)
 
 
 # file[["salary", "salary_in_usd", "remote_ratio"]].describe().quantile([.10, .25, .50, .75, 1.00])
+# %%
