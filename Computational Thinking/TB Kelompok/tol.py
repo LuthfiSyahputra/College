@@ -18,6 +18,9 @@ p_tipe     = ["mobil", "mobil bak/minivan", "truk mini", "truk", "truk roda 6", 
 p_berat    = [2000, 3000, 5000, 7500, 9000, 12000]
 p_tinggi   = [3.5, 3.5, 5, 6, 6, 7]
 
+
+kks = 0
+
 # card Database
 card_database = [
     # [cardID, nama pengguna, saldo, status_kartu , riwayat, km]
