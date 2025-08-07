@@ -1,0 +1,37 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.15 Chrome/134.0.6998.205 Electron/35.2.1 Safari/537.36" version="26.2.15">
+  <diagram name="Page-1" id="ovEs7ys3lFll70bNHiZ2">
+    <mxGraphModel dx="786" dy="524" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="plq_eYcCseepV6yqULkO-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="plq_eYcCseepV6yqULkO-1" target="plq_eYcCseepV6yqULkO-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="plq_eYcCseepV6yqULkO-1" value="Mulai" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="70" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="plq_eYcCseepV6yqULkO-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="plq_eYcCseepV6yqULkO-4" target="plq_eYcCseepV6yqULkO-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="plq_eYcCseepV6yqULkO-4" value="input(kWh)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="148" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="plq_eYcCseepV6yqULkO-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="plq_eYcCseepV6yqULkO-5" target="plq_eYcCseepV6yqULkO-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="plq_eYcCseepV6yqULkO-5" value="tagihan&amp;nbsp;&lt;span style=&quot;color: rgb(238, 240, 255); font-family: Arial, sans-serif; font-size: 18px; text-align: start; background-color: rgb(31, 31, 31);&quot;&gt;← &lt;/span&gt;&lt;span style=&quot;color: rgb(238, 240, 255); font-family: Arial, sans-serif; text-align: start; background-color: rgb(31, 31, 31);&quot;&gt;&lt;font&gt;(kWh * 1444.70)&lt;/font&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="325" y="240" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="plq_eYcCseepV6yqULkO-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="plq_eYcCseepV6yqULkO-6" target="plq_eYcCseepV6yqULkO-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="plq_eYcCseepV6yqULkO-6" value="output(tagihan)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="323" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="plq_eYcCseepV6yqULkO-7" value="Selesai" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="420" width="120" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

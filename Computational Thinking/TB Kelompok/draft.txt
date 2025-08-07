@@ -1,0 +1,33 @@
+GERBANG PINTU TOL
+Mengidentifikasi kendaraan dan mengukur jarak yang ditempuh berdasarkan pintu masuk & keluar
+Serta melakukan pembayaran secara otomatis melalui E-Money dan melaporkan kejadian tidak terduga
+
+Konsep CT:
+	- Dekomposisi
+	- Abstraksi
+
+
+- FUNGSIONALITAS
+	Identifikasi kendaraan
+		Jenis		
+		Berat
+
+	Deteksi pintu masuk-keluar tol		
+		lokasi masuk
+		lokasi keluar
+		arah Jalur
+		
+	Pembayaran
+		Tunai
+		E-money
+		
+	Error Handling
+		Saldo tidak cukup
+		E-Money tidak terdeteksi
+		Jalur salah/tidak sesuai
+		Penerobosan gerbang tol
+
+		Solusi: Menghubungi petugas yang bersangkutan
+
+	Pembukaan gerbang
+	
