@@ -1,0 +1,57 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.15 Chrome/134.0.6998.205 Electron/35.2.1 Safari/537.36" version="26.2.15">
+  <diagram name="Page-1" id="ipt4Kt7Sx9uQrlR0ACr-">
+    <mxGraphModel dx="542" dy="361" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="IkpXYTgl3K8qra5wuV8V-1" target="IkpXYTgl3K8qra5wuV8V-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-1" value="Mulai" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="277.5" y="120" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="vbTXEXq8L8wlbT2ZXjoq-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="IkpXYTgl3K8qra5wuV8V-3" target="IkpXYTgl3K8qra5wuV8V-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-3" value="input(v, t)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="277.5" y="182" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="IkpXYTgl3K8qra5wuV8V-6" target="IkpXYTgl3K8qra5wuV8V-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-7" value="Selesai" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="277.5" y="320" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="vbTXEXq8L8wlbT2ZXjoq-2" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="241.25" y="243" width="192.5" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-6" value="output(&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="vbTXEXq8L8wlbT2ZXjoq-2" vertex="1">
+          <mxGeometry width="192.5" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-4" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;hitungJarak(v, t)&lt;/font&gt;" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" parent="vbTXEXq8L8wlbT2ZXjoq-2" vertex="1">
+          <mxGeometry x="64.5" y="10" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="vbTXEXq8L8wlbT2ZXjoq-4" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="450" y="120" width="160" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-28" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;glass=0;shadow=0;labelBackgroundColor=none;" parent="vbTXEXq8L8wlbT2ZXjoq-4" vertex="1">
+          <mxGeometry width="160" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="vbTXEXq8L8wlbT2ZXjoq-4" source="IkpXYTgl3K8qra5wuV8V-12" target="IkpXYTgl3K8qra5wuV8V-18" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="82.63" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-12" value="hitungJarak(v, t)" style="rounded=1;whiteSpace=wrap;html=1;" parent="vbTXEXq8L8wlbT2ZXjoq-4" vertex="1">
+          <mxGeometry x="20" y="34.477611940298516" width="120" height="31.52238805970149" as="geometry" />
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-18" value="return (v * t)" style="rounded=1;whiteSpace=wrap;html=1;" parent="vbTXEXq8L8wlbT2ZXjoq-4" vertex="1">
+          <mxGeometry x="20" y="108.44999999999999" width="120" height="29.55" as="geometry" />
+        </mxCell>
+        <mxCell id="IkpXYTgl3K8qra5wuV8V-29" value="Function hitungJarak" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="vbTXEXq8L8wlbT2ZXjoq-4" vertex="1">
+          <mxGeometry width="130" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
