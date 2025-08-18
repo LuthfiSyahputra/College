@@ -21,4 +21,7 @@ _location = [
 
 kode = 201
 
+arr = [[]]
+
 print(_location[int(kode/100)][kode % 100])
+print(len(arr))
