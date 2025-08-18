@@ -16,6 +16,7 @@ STATUS_INVALID = -1
 STATUS_ERROR = -2 
 
 # Lokasi pintu tol
+MAX_LOCAL          = 100    # Konstanta besaran kode domisili
 LOCATION_CODE_NULL = int(0)
 
 LOCATION_ABS_DISTANCE = 0
@@ -52,7 +53,7 @@ CARD_NULL = [CARD_ID_DEF, CARD_NAME_DEF, CARD_BALANCE_DEF, CARD_STATUS_DEF, CARD
 def location_search(location: str):
     for dom in range(1, len(domisili)):
         for i in range(len(_location[dom])):
-            if(_location[dom][i][1] == location): return ((dom * 100) + i)
+            if(_location[dom][i][1] == location): return ((dom * MAX_LOCAL) + i)
 
 
     print(f"[ERROR] findLocation(): Lokasi tidak ditemukan, lokasi: \"{location}\"")
@@ -98,7 +99,7 @@ def card_verificator(card, locationCode: int, jenisPintu: bool):
             return STATUS_INVALID
        
         # Cek kesesuaian domisili
-        elif(int(card[CARD_HISTORY]/100) != int(locationCode/100)):
+        elif(int(card[CARD_HISTORY] / MAX_LOCAL) != int(locationCode / MAX_LOCAL)):
             print("[INVALID] card_verificator(): domisili rute masuk berbeda dengan keluar")
             return STATUS_INVALID
         
@@ -127,7 +128,6 @@ matikanMesin    = False
 panggilPetugas   = False
 deteksiKendaraan = False
 ATM_EMoney       = False
-
 
 # Inisialisasi database kartu dari file csv
 cardDatabase = CARD_NULL
@@ -229,12 +229,12 @@ while(matikanMesin == False):
 
                 # denda putar balik (jarak += 2 * jarak terjauh dalam domisili)
                 if(status == STATUS_INVALID):
-                    distance += (2 * _location[int(locationCode/100)][-1][LOCATION_ABS_DISTANCE])
+                    distance += (2 * _location[int(locationCode / MAX_LOCAL)][-1][LOCATION_ABS_DISTANCE])
                     panggilPetugas = True
 
                 # biaya
-                S0 = _location[int(card[CARD_HISTORY]/100)][card[CARD_HISTORY] % 100][LOCATION_ABS_DISTANCE]
-                S1 = _location[int(locationCode/100)][locationCode % 100][LOCATION_ABS_DISTANCE]
+                S0 = _location[int(card[CARD_HISTORY]/MAX_LOCAL)][card[CARD_HISTORY] % MAX_LOCAL][LOCATION_ABS_DISTANCE]
+                S1 = _location[int(locationCode/MAX_LOCAL)][locationCode % MAX_LOCAL][LOCATION_ABS_DISTANCE]
 
                 distance += abs(S1 - S0)
                 totalFee += float(distance * basePrice)

@@ -237,10 +237,10 @@ cardDatabaseDefault = [
 
 # cardDatabase_update(cardDatabaseDefault)
 
-# cardDatabase = cardDatabase_read()
-# card_management(cardDatabase)
+cardDatabase = cardDatabase_read()
+card_management(cardDatabase)
 
-data = cardDatabase_read("data.csv")
-print(len(data))
+# data = cardDatabase_read("data.csv")
+# print(len(data))
 
 
