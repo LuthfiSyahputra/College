@@ -162,7 +162,7 @@ def menuInput(menu) -> int:
 def card_management(cardDatabase: list, databaseFile: str = "cardDatabase.csv"):
     menu = 0
     card = CARD_NULL
-    while(menu != MENU_EXIT):
+    while(True):
         print("\033[2J\033[HSelamat datang di mesin pengelola E-Money.")
         status = STATUS_INVALID
         menu   = menuInput(card_menu)
@@ -203,8 +203,8 @@ def card_management(cardDatabase: list, databaseFile: str = "cardDatabase.csv"):
             for i in range(len(cardDatabase)):
                 print(f"{i}:\t{cardDatabase[i]}")
 
-        elif(menu == MENU_HELP):
-            return STATUS_ERROR
+        elif(menu == MENU_HELP): return STATUS_ERROR
+        elif(menu == MENU_EXIT): return STATUS_VALID
         
         else:
             status = STATUS_ERROR
@@ -217,9 +217,10 @@ def card_management(cardDatabase: list, databaseFile: str = "cardDatabase.csv"):
         elif((status == STATUS_INVALID) or (status == STATUS_ERROR)): 
             print("Transaksi gagal.")
 
-        print("\nTekan tombol apapun untuk melamjutkan...")
+        print("Tekan tombol apapun untuk melanjutkan...\n")
         msvcrt.getch()
 
+    
 
 
 cardDatabaseDefault = [
@@ -237,10 +238,7 @@ cardDatabaseDefault = [
 
 # cardDatabase_update(cardDatabaseDefault)
 
-cardDatabase = cardDatabase_read()
-card_management(cardDatabase)
-
-# data = cardDatabase_read("data.csv")
-# print(len(data))
-
+if(__name__ == "__main__"):
+    cardDatabase = cardDatabase_read()
+    card_management(cardDatabase)
 

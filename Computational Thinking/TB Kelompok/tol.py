@@ -20,7 +20,7 @@ MAX_LOCAL          = 100    # Konstanta besaran kode domisili
 LOCATION_CODE_NULL = int(0)
 
 LOCATION_ABS_DISTANCE = 0
-LOCATION_POS_NAME = 1
+LOCATION_NAME = 1
 
 domisili  = dataLokasi.domisili
 _location = dataLokasi.location
@@ -50,15 +50,18 @@ cardDatabase_field = ["CardID", "Nama Pengguna", "Saldo (Rp)", "Status Kartu", "
 CARD_NULL = [CARD_ID_DEF, CARD_NAME_DEF, CARD_BALANCE_DEF, CARD_STATUS_DEF, CARD_HISTORY_DEF]
 
 
-def location_search(location: str):
-    for dom in range(1, len(domisili)):
-        for i in range(len(_location[dom])):
-            if(_location[dom][i][1] == location): return ((dom * MAX_LOCAL) + i)
 
+# Algoritma pencarian lokasi dan mengeluarkan kode lokasinya
+def location_search(location: str, locationData):
+    for dom in range(1, len(locationData)):
+        for local in range(len(locationData[dom])):
+            if(locationData[dom][local][LOCATION_NAME] == location): return ((dom * MAX_LOCAL) + local)
 
     print(f"[ERROR] findLocation(): Lokasi tidak ditemukan, lokasi: \"{location}\"")
     return LOCATION_CODE_NULL
 
+
+# Algoritma verifikasi rute dengan metode vektor 1-dimensi dalam kode lokasi
 def route_verificator(card, locationCode):
     if((card[CARD_HISTORY] == LOCATION_CODE_NULL) or (locationCode == LOCATION_CODE_NULL)):
         return STATUS_ERROR
@@ -72,11 +75,11 @@ def route_verificator(card, locationCode):
         return STATUS_INVALID
 
     
-
+# Verifikasi validitas data kartu dengan rute yang dipilih
 def card_verificator(card, locationCode: int, jenisPintu: bool):
     if(card == CARD_NULL): 
         print(f"[ERROR] card_search(): Kartu E-Toll tidak ditemukan")
-        return STATUS_INVALID
+        return STATUS_ERROR
 
     print(f"[{card[CARD_ID]}] {card[CARD_NAME]}  saldo: Rp. {card[CARD_BALANCE]}  status: {card[CARD_STATUS]}")
     
@@ -92,7 +95,7 @@ def card_verificator(card, locationCode: int, jenisPintu: bool):
         return STATUS_INVALID
 
 
-    if(jenisPintu == EXIT):
+    elif(jenisPintu == EXIT):
         # Cek apakah kartu pernah tap-in
         if(card[CARD_HISTORY] == LOCATION_CODE_NULL):
             print("[INVALID] card_verificator(): Kartu tidak ada riwayat masuk")
@@ -107,20 +110,20 @@ def card_verificator(card, locationCode: int, jenisPintu: bool):
     return STATUS_VALID
 
 
-def basePrice_calculator(gol, weight, height):
-    if((weight < 0) and (height < 0)):
+# Kalkulator untuk basePrice (tarif unik/km)
+def basePrice_calculator(basePrice: float, weight: float, height: float, maxW: float, maxH: float) -> float:
+    if((weight < 0) or (height < 0)):
         print(f"[ERROR] Berat atau tinggi tidak valid. berat: {weight} kg, tinggi: {height}")
         return STATUS_ERROR
 
-    basePrice = vehicle_tariff_km[gol]
-
     # denda kelebihan beban senilai denda = tarif_gol/km * (beban_lebih / (10% * beban_max))
-    if(weight > vehicle_maxWeight[gol]): 
-        basePrice = basePrice + (vehicle_tariff_km[gol] * ((weight - vehicle_maxWeight[gol]) / (vehicle_maxWeight[gol] / 10)))
+    if(weight > maxW): 
+        basePrice += (basePrice * ((weight - maxW) / (maxW / 10)))
 
     return basePrice
 
 
+# Direktori file default untuk database kartu
 DATABASE_DIR = "cardDatabase.csv"
 
 # =========================== PROGRAM UTAMA ==================================
@@ -138,28 +141,39 @@ while(cardDatabase == CARD_NULL):
     cardDatabase = cs.cardDatabase_read(databaseFile)
 
 
+print(f"Memulai operasi mesin, database E-Money: \"{databaseFile}\"\n")
+# Loop utama, mesin akan selalu berjalan hingga dimatikan secara eksplisit (dari [matikanMesin] flag)
 while(matikanMesin == False):
+    print("\033[1AMenunggu sensor input...")
 
+    # Hanya untuk cek input utama mesin, deteksi apakah keyboard ditekan 
+    # lalu rubah state/kondisi mesin berdasarkan inputnya
     if(msvcrt.kbhit() == True):
         state = int.from_bytes(msvcrt.getch())
 
+        # "State" mesin, 3 tombol utama. dan 1 kondisi khusus saat berada di mesin ATM E-Money
         match(state):
             case 27: matikan_mesin    = True # ESC Key
             case 13: deteksiKendaraan = True # Enter/Return Key
             case 49: panggilPetugas   = True # "1" Key
-            case 50: ATM_EMoney       = True # "2 Key"
-            # case _: print(f"state: {state}")       
 
-    # Pemanggilan Petugas
+            case 50: ATM_EMoney       = True # "2 Key"
+  
+
+
+    # Pemanggilan Petugas (bisa dikembangakan lebih lanjut)
     if(panggilPetugas == True):
-        print("Petugas dipanggil")
+        print("Petugas dipanggil\n")
         panggilPetugas = False
         # kode panggil petugas
 
-    # E-Money Management
+
+    # E-Money Management (Algoritma utama berasa pada card_management di file cs.py)
+    # Bisa dikembangkan lebih lanjut tambahan khusus untuk program tol.py (seperti panggil petugas)
     if(ATM_EMoney == True):
         status = cs.card_management(cardDatabase, databaseFile)
         if(status != STATUS_VALID): panggilPetugas = True
+        else: print("Berhasil keluar dari mesin ATM\n")
 
         ATM_EMoney = False
 
@@ -178,12 +192,15 @@ while(matikanMesin == False):
             panggilPetugas = True
             break
 
+        # basePrice = tarif unik/km
         basePrice = -1
         while(basePrice < 0):
             basePrice = basePrice_calculator(
-                gol, 
+                vehicle_tariff_km[gol], 
                 float(input("Berat Kendaraan (kg): ")),
-                float(input("Tinggi kendaraaan (m): "))
+                float(input("Tinggi kendaraaan (m): ")),
+                vehicle_maxWeight[gol],
+                vehicle_maxHeight[gol]
             )
 
 
@@ -195,7 +212,7 @@ while(matikanMesin == False):
         locationCode = LOCATION_CODE_NULL
         while(locationCode == LOCATION_CODE_NULL):
             location     = str(input(f"Lokasi pintu tol {_location}: "))
-            locationCode = (-1 ** direction) * location_search(location)
+            locationCode = (-1 ** direction) * location_search(location, _location)
 
 
         print(f"loc: {locationCode}")
@@ -223,6 +240,7 @@ while(matikanMesin == False):
 
             elif(gate == EXIT):
                 status = route_verificator(card, locationCode)
+                if(status == STATUS_ERROR): break
 
                 locationCode       = abs(locationCode)
                 card[CARD_HISTORY] = abs(card[CARD_HISTORY])
@@ -253,9 +271,9 @@ while(matikanMesin == False):
         # ================================== BUKA PINTU & POST-PROCESSING ===========================
         cs.cardDatabase_update(cardDatabase, databaseFile)
         if(status == STATUS_VALID):
-            print(f"Buka Gerbang Tol. Pembayaran berasil, sisa saldo: Rp {card[CARD_BALANCE]}")
+            print(f"Buka Gerbang Tol. Pembayaran berasil, sisa saldo: Rp {card[CARD_BALANCE]}\n")
         else:
-            print("Transaksi gagal. Petugas dipanggil")
+            print("Transaksi gagal. Petugas dipanggil\n")
             panggilPetugas = True
         
         
