@@ -127,7 +127,7 @@ def basePrice_calculator(basePrice: float, weight: float, height: float, maxW: f
 DATABASE_DIR = "cardDatabase.csv"
 
 # =========================== PROGRAM UTAMA ==================================
-matikanMesin    = False
+matikanMesin     = False
 panggilPetugas   = False
 deteksiKendaraan = False
 ATM_EMoney       = False
@@ -153,11 +153,13 @@ while(matikanMesin == False):
 
         # "State" mesin, 3 tombol utama. dan 1 kondisi khusus saat berada di mesin ATM E-Money
         match(state):
-            case 27: matikan_mesin    = True # ESC Key
+            case 27: matikanMesin    = True # ESC Key
             case 13: deteksiKendaraan = True # Enter/Return Key
             case 49: panggilPetugas   = True # "1" Key
 
             case 50: ATM_EMoney       = True # "2 Key"
+        
+        print(f"state: {state}")
   
 
 
@@ -206,14 +208,14 @@ while(matikanMesin == False):
 
 
         # ========================== PINTU TOL =================================
-        gate      = bool(input("Gerbang pintu tol (0: masuk, 1: keluar): "))
-        direction = bool(input("Arah jalan tol (0: forward, 1: backward): "))
+        gate      = int("0" != input("Gerbang pintu tol (0: masuk, 1: keluar): "))
+        direction = int("0" != input("Arah jalan tol (0: forward, 1: backward): "))
 
         # ALGORITMA PENCARIAN LOKASI
         locationCode = LOCATION_CODE_NULL
         while(locationCode == LOCATION_CODE_NULL):
-            location     = str(input(f"Lokasi pintu tol {locationData}: "))
-            locationCode = (-1 ** direction) * location_search(location, locationData)
+            location     = str(input(f"Lokasi pintu tol: "))
+            locationCode = pow(-1, direction) * location_search(location, locationData)
 
         print(f"loc: {locationCode}")
 
@@ -248,6 +250,7 @@ while(matikanMesin == False):
                 # denda putar balik (jarak += 2 * jarak terjauh dalam domisili)
                 if(status == STATUS_INVALID):
                     distance += (2 * locationData[int(locationCode / MAX_LOCAL)][-1][LOCATION_ABS_DISTANCE])
+                    print(f"[PERINGATAN] Pelanggaran terdeteksi. denda jarak: {distance} km")
                     panggilPetugas = True
 
                 # biaya
@@ -258,25 +261,26 @@ while(matikanMesin == False):
                 totalFee += float(distance * basePrice)
 
 
+                print(f"Total tarif tol: Rp. {totalFee}")
                 if(card[CARD_BALANCE] >= totalFee):
                     card[CARD_BALANCE] -= totalFee
                     status = STATUS_VALID
                 else: 
-                    print("Saldo tidak cukup")
+                    print(f"Saldo tidak cukup. Sisa saldo: Rp. {card[CARD_BALANCE]}")
                     status = STATUS_INVALID
 
                 card[CARD_HISTORY] = CARD_HISTORY_DEF
         
 
         # ================================== BUKA PINTU & POST-PROCESSING ===========================
-        cs.cardDatabase_update(cardDatabase, databaseFile)
         if(status == STATUS_VALID):
-            print(f"Buka Gerbang Tol. Pembayaran berasil, sisa saldo: Rp {card[CARD_BALANCE]}\n")
+            print(f"Buka Gerbang Tol. Transaksi berasil, sisa saldo: Rp {card[CARD_BALANCE]}\n")
         else:
             print("Transaksi gagal. Petugas dipanggil\n")
             panggilPetugas = True
         
         
+        cs.cardDatabase_update(cardDatabase, databaseFile)
         deteksiKendaraan = False
 
    

@@ -1,3 +1,5 @@
+
+
 _location = [
 [
     # [Jarak Absolut, Nama Lokasi]
@@ -19,9 +21,12 @@ _location = [
 ]
 ]
 
-kode = 201
+# kode = 201
 
-arr = [[]]
+# arr = [[]]
 
-print(_location[int(kode/100)][kode % 100])
-print(len(arr))
+# print(_location[int(kode/100)][kode % 100])
+# print(len(arr))
+
+k = int(input() != "0")
+print(pow(-1,k))
