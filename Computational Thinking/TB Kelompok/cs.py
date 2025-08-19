@@ -203,8 +203,8 @@ def card_management(cardDatabase: list, databaseFile: str = "cardDatabase.csv"):
             for i in range(len(cardDatabase)):
                 print(f"{i}:\t{cardDatabase[i]}")
 
-        elif(menu == MENU_HELP): return STATUS_ERROR
         elif(menu == MENU_EXIT): return STATUS_VALID
+        elif(menu == MENU_HELP): return STATUS_ERROR
         
         else:
             status = STATUS_ERROR

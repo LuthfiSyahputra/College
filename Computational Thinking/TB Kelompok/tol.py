@@ -23,7 +23,7 @@ LOCATION_ABS_DISTANCE = 0
 LOCATION_NAME = 1
 
 domisili  = dataLokasi.domisili
-_location = dataLokasi.location
+locationData = dataLokasi.location
 
 
 # KONSTANTA DAN PERSYARATAN MINIMUM KENDARAAN per GOLONGAN
@@ -102,7 +102,7 @@ def card_verificator(card, locationCode: int, jenisPintu: bool):
             return STATUS_INVALID
        
         # Cek kesesuaian domisili
-        elif(int(card[CARD_HISTORY] / MAX_LOCAL) != int(locationCode / MAX_LOCAL)):
+        elif(abs(int(card[CARD_HISTORY] / MAX_LOCAL)) != abs(int(locationCode / MAX_LOCAL))):
             print("[INVALID] card_verificator(): domisili rute masuk berbeda dengan keluar")
             return STATUS_INVALID
         
@@ -111,10 +111,10 @@ def card_verificator(card, locationCode: int, jenisPintu: bool):
 
 
 # Kalkulator untuk basePrice (tarif unik/km)
-def basePrice_calculator(basePrice: float, weight: float, height: float, maxW: float, maxH: float) -> float:
+def basePrice_calculator(basePrice: float, weight: float, height: float, maxW: float, maxH: float):
     if((weight < 0) or (height < 0)):
-        print(f"[ERROR] Berat atau tinggi tidak valid. berat: {weight} kg, tinggi: {height}")
-        return STATUS_ERROR
+        print(f"[INVALID] Berat atau tinggi tidak valid. berat: {weight} kg, tinggi: {height}")
+        return STATUS_INVALID
 
     # denda kelebihan beban senilai denda = tarif_gol/km * (beban_lebih / (10% * beban_max))
     if(weight > maxW): 
@@ -182,6 +182,7 @@ while(matikanMesin == False):
     # ALGORITMA UTAMA
     if(deteksiKendaraan == True):
         print("Kendaraan terdeteksi")
+        status = STATUS_INVALID     # Initialisasi status default: INVALID, sampai terbukti VALID 
 
         # ==================== INPUT KENDARAAN ============================
         reg_num = str(input("Nomor registrasi kendaraan (OPSIONAL): "))
@@ -193,8 +194,8 @@ while(matikanMesin == False):
             break
 
         # basePrice = tarif unik/km
-        basePrice = -1
-        while(basePrice < 0):
+        basePrice = STATUS_INVALID
+        while(basePrice == STATUS_INVALID):
             basePrice = basePrice_calculator(
                 vehicle_tariff_km[gol], 
                 float(input("Berat Kendaraan (kg): ")),
@@ -211,18 +212,17 @@ while(matikanMesin == False):
         # ALGORITMA PENCARIAN LOKASI
         locationCode = LOCATION_CODE_NULL
         while(locationCode == LOCATION_CODE_NULL):
-            location     = str(input(f"Lokasi pintu tol {_location}: "))
-            locationCode = (-1 ** direction) * location_search(location, _location)
-
+            location     = str(input(f"Lokasi pintu tol {locationData}: "))
+            locationCode = (-1 ** direction) * location_search(location, locationData)
 
         print(f"loc: {locationCode}")
-        status = STATUS_INVALID
+
 
 
         # =============================== E - MONEY =======================================
-        card = CARD_NULL
-        for i in range(1, 6):
-            card   = cs.card_search(cardDatabase, int(input(f"[{i}/6] Tempelkan kartu E-Toll. cardID: ")) )
+        card   = CARD_NULL
+        for attempt in range(1, 6):
+            card   = cs.card_search(cardDatabase, int(input(f"[{attempt}/6] Tempelkan kartu E-Toll. cardID: ")) )
             status = card_verificator(card, locationCode, gate)
 
             if(status == STATUS_VALID): break
@@ -247,12 +247,12 @@ while(matikanMesin == False):
 
                 # denda putar balik (jarak += 2 * jarak terjauh dalam domisili)
                 if(status == STATUS_INVALID):
-                    distance += (2 * _location[int(locationCode / MAX_LOCAL)][-1][LOCATION_ABS_DISTANCE])
+                    distance += (2 * locationData[int(locationCode / MAX_LOCAL)][-1][LOCATION_ABS_DISTANCE])
                     panggilPetugas = True
 
                 # biaya
-                S0 = _location[int(card[CARD_HISTORY]/MAX_LOCAL)][card[CARD_HISTORY] % MAX_LOCAL][LOCATION_ABS_DISTANCE]
-                S1 = _location[int(locationCode/MAX_LOCAL)][locationCode % MAX_LOCAL][LOCATION_ABS_DISTANCE]
+                S0 = locationData[int(card[CARD_HISTORY]/MAX_LOCAL)][card[CARD_HISTORY] % MAX_LOCAL][LOCATION_ABS_DISTANCE]
+                S1 = locationData[int(locationCode/MAX_LOCAL)][locationCode % MAX_LOCAL][LOCATION_ABS_DISTANCE]
 
                 distance += abs(S1 - S0)
                 totalFee += float(distance * basePrice)
