@@ -1,0 +1,22 @@
+Choose your own python interpreter
+
+If you don't have any, I recommend download and install python from the official website
+> https://www.python.org/downloads/
+
+To manage and modify cardDatabase.csv
+- Run cs.py 
+    with command in terminal "py cs.py" in the source file directory in the original python interpreter
+    or with methods you're choosing from your own interpreter
+
+However the necessary module and function of cs.py is already included in the main Algorithm (tol.py)
+
+Run tol.py
+    - type in terminal "$dir/py tol.py" or with your own methods
+    - Specify the file to store the card database (cardDatabase.csv for default)
+    - After the program successfully started the program will wait for inputs from the corresponding machine
+
+    We use keyboard for simulating the sensors:
+    - [Esc] key to exit the simulation
+    - [Enter/Return] key to run the main toll program (if a vehicle is detected)
+    - [1] key to call for help
+    - [2] key to manage card database (this will automatically run the necessary commands from cs.py)
