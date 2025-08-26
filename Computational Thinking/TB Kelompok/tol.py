@@ -47,7 +47,7 @@ CARD_STATUS  = 3
 CARD_HISTORY = 4
 
 cardDatabase_field = ["CardID", "Nama Pengguna", "Saldo (Rp)", "Status Kartu", "Riwayat (Kode Lokasi)"]
-CARD_NULL = [CARD_ID_DEF, CARD_NAME_DEF, CARD_BALANCE_DEF, CARD_STATUS_DEF, CARD_HISTORY_DEF]
+CARD_NULL          = [CARD_ID_DEF, CARD_NAME_DEF, CARD_BALANCE_DEF, CARD_STATUS_DEF, CARD_HISTORY_DEF]
 
 
 
@@ -68,7 +68,7 @@ def route_verificator(card, locationCode):
 
     dS = locationCode - card[CARD_HISTORY]
     
-    # Verifikasi arah vektor
+    # Verifikasi arah dan besaran vektor
     if(((card[CARD_HISTORY] > 0) == (locationCode > 0)) and (dS > 0)): 
         return STATUS_VALID
     else:
@@ -93,7 +93,6 @@ def card_verificator(card, locationCode: int, jenisPintu: bool):
     if((jenisPintu == ENTRANCE) and (card[CARD_HISTORY] != LOCATION_CODE_NULL)):
         print("[INVALID] card_verificator(): Kartu telah digunakan untuk masuk dan belum pernah keluar")
         return STATUS_INVALID
-
 
     elif(jenisPintu == EXIT):
         # Cek apakah kartu pernah tap-in

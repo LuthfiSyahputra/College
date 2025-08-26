@@ -74,7 +74,6 @@ def card_info(card):
         print(f"[ERROR] card_info(): Kartu tidak terbaca/Tidak ada")
         return STATUS_ERROR
     
-
     print(f"Nama Pengguna: {card[CARD_NAME]}")
     print(f"Status kartu: {card[CARD_STATUS]}")
     print(f"Histori terakhir: {card[CARD_HISTORY]}")
@@ -113,7 +112,7 @@ def card_topup(card):
     amount = float(input("Masukkan jumlah top-up yang ingin dimasukkan: Rp. "))
 
     if(amount < 10000):
-        print("[INVALID] card_topup(): Min top-up Rp. 20000,-")
+        print("[INVALID] card_topup(): Min top-up Rp. 10000,-")
         return STATUS_INVALID
     else:
         card[CARD_BALANCE] = card_balance(card, amount)
@@ -240,5 +239,8 @@ cardDatabaseDefault = [
 
 if(__name__ == "__main__"):
     cardDatabase = cardDatabase_read()
-    card_management(cardDatabase)
+    status = card_management(cardDatabase)
+
+    if(status != STATUS_VALID):
+        print("Petugas dipanggil!!")
 
