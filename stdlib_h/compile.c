@@ -30,9 +30,18 @@ const char* compileCmd_str[] = {
     "Optimize",
     "Safe Mode",
     "Change File Name",
+    "Change Input Directory",
     "Change Output Directory",
     "exit",
     "[EXPERIMENTAL] DIR"
+};
+
+char* _filetype[] = {
+    "c",
+    "h",
+    "s",
+    "exe",
+    ""
 };
 
 #define TOTAL_CMD_MODE (sizeof(compileCmd_str) / sizeof(char*))
@@ -46,6 +55,7 @@ enum {
     OPTIMIZE,
     SAFE_MODE,
     FILENAME,
+    IN_DIR,
     OUT_DIR,
     CMD_EXIT,
     DIR
@@ -76,6 +86,11 @@ int systemf_s(const char* __cmdformat, ...);
 clock_t clockElapsed(register clock_t* _lastClock);
 clock_t _clockElapsed();
 
+int filetype(char* str, char* filetype_collection[]);
+char* lastchar(char* str, register char c);
+int _word_check(char* collection[], char* str, int n);
+int _nstring_check(char* str[]);
+
 int getargs(char* argv[], int _maxargs);
 int _getargs(char* arginput, char* argv[], int _maxargs);
 int _setargs(char* arginput, char* _argsbuffer, char* argv[], int _maxargs);
@@ -87,65 +102,11 @@ int _printArgs(int argc, char* argv[]);
 void printMenu(const char* menu[], int n, int nStart);
 int print_cls(char* str, ...);
 
-int compile(int argc, char* argv[], char* filename, char* output_dir);
+int compile(int argc, char* argv[], char* filename, char* input_dir, char* output_dir);
 int customcmd(int argc, char* argv[]);
 
 const char* __border__ = "===========================================================================================";
 
-int tempcompile(int argc, char* argv[]) {
-
-    char str[STD_STRLEN];
-    char dir[STD_STRLEN];
-
-
-    if(argc < 1) {
-        fprintf(stderr, "%s", "Please specify the filename (excluding the extension)\n");
-        return 0;
-    }
-    
-    // make directory
-    snprintf(dir, STD_STRLEN, "%s", (argc >= 2) ? argv[1] : STD_DIR);
-
-
-    systemf("mkdir %s", dir);
-    system("cls");
-
-    // compile border
-    printf("%s\n\n\n%s\n", __border__, __border__);
-
-    // main executable
-    systemf_s("gcc %s.c -o %s/%s", argv[0], dir, argv[0]);
-
-    // // main optimized
-    // systemf_s("gcc -O4 %s.c -o %s/%s_optimized", argv[0], dir, argv[0]);
-
-    // // main asm
-    // systemf_s("gcc -S -masm=intel %s.c -o %s/%s.s", argv[0], dir, argv[0]);
-
-    // // unoptimized asm
-    // systemf_s("gcc -O1 -S -masm=intel %s.c -o %s/%s_unoptimized.s", argv[0], dir, argv[0]);
-
-    // // optimized asm
-    // systemf_s("gcc -O4 -S -masm=intel %s.c -o %s/%s_optimized.s", argv[0], dir, argv[0]);
-
-    // // dirctory check
-    // systemf_s("dir %s", dir);
-
-    // open the file
-    printf("%s", "\n================= DEBUG MODE ==================\n\n");
-    systemf_s("%s\\%s", dir, argv[0]);
-
-    // test file (if exist)
-    if(argc >= 4) {
-        snprintf(str, STD_STRLEN, "gcc %s.c -o %s/%s", argv[3], dir, argv[3]);
-        system_h(str);
-
-        snprintf(str, STD_STRLEN, "%s\\%s", dir, argv[3]);
-        system_h(str);
-    }
-
-
-}
 
 int main() {
 
@@ -154,15 +115,18 @@ int main() {
     int errcode = 0;
     int argc = 0;
     int arg = -1;
-    char filename_buf[0x400] = { 0 };
+    char filename[0x100] = { 0 };
+
+    char compile_dir[0x400] = { 0 };
+    char input_dir[0x400] = { 0 };
     char output_dir[0x400] = STD_DIR;
     char halt = FALSE;
 
     for (int i = 0; TRUE ; i++) {
         RESET_ARR(cmdbool, TOTAL_CMD_MODE + 1);
         halt = FALSE;
-
-        print_cls("filename: \"%s\"  => \"%s/%s\"\n", filename_buf, output_dir, filename_buf);
+        
+        print_cls("filename: \"%s/%s\"  => \"%s\"\n", input_dir, filename, output_dir);
         printMenu(compileCmd_str, TOTAL_CMD_MODE, EXE_FILE);
         printf("\t[...] custom command\n");
 
@@ -174,12 +138,17 @@ int main() {
         {
         case FILENAME:
             print_cls("Specify the local path filename: \"$/.../filename\" (no extension)\n=> ");
-            _getline(filename_buf, sizeof(filename_buf));
+            _getline(filename, sizeof(filename));
             break;
         
         case OUT_DIR:
             print_cls("Specify the output directory: \"$/{dir}\"\n=> ");
             _getline(output_dir, sizeof(output_dir));
+            break;
+        
+        case IN_DIR:
+            print_cls("Specify the input directory: \"$/{dir}\"\n=> ");
+            _getline(input_dir, sizeof(input_dir));
             break;
         
         case CMD_EXIT:
@@ -192,7 +161,8 @@ int main() {
             break;
         
         case EXE_FILE: case ASM_FILE: case DEBUG: case OPTIMIZE: case SAFE_MODE:
-            compile(argc, argv, filename_buf, output_dir);
+            // snprintf(filename_buf, sizeof(filename_buf), "%s%s%s", filename_dir, (*filename_dir == '\0') ? "" : "\\", filename);
+            compile(argc, argv, filename, input_dir, output_dir);
             halt = TRUE;
             break;
 
@@ -207,12 +177,14 @@ int main() {
 }
 
 
-int compile(int argc, char* argv[], char* filename, char* output_dir){
+int compile(int argc, char* argv[], char* filename, char* input_dir, char* output_dir) {
     int cmd = 0;
     unsigned int optimize = 0;
     char tempbuf[0xff];
     char exParams[0xfff] = "";
     char outputfile[0xfff];
+    char filename_buf[0x400] = "";
+    
 
     // set all compile flags from the args input
     for (int i = 0; i < argc; i++) {
@@ -233,7 +205,7 @@ int compile(int argc, char* argv[], char* filename, char* output_dir){
         snprintf(tempbuf, sizeof(tempbuf), "-pedantic -Werror");
         strcat(exParams, tempbuf);
     }
-    
+
     // output directory
     if (*output_dir != '\0') { systemf("mkdir %s", output_dir); }
     snprintf(outputfile, sizeof(outputfile), "%s%s%s", output_dir, (*output_dir == '\0') ? "" : "\\", filename);
@@ -412,4 +384,44 @@ int print_cls(char* str, ...) {
     int retval = vprintf(str, local_argv);
     va_end(local_argv);
     return retval;
+}
+
+// filetype_collection end with "\0", or NULL to default
+int filetype(char* str, char* filetype_collection[]) {
+    char* dot_pos;
+    if((dot_pos = lastchar(str, '.')) != NULL) dot_pos++;
+    else return -1; 
+
+    int n;
+    if (filetype_collection == NULL) {
+        filetype_collection = _filetype;
+        n = sizeof(_filetype) / sizeof(char*);
+    }
+    else n = _nstring_check(filetype_collection);
+    return _word_check(filetype_collection, dot_pos, n);
+    
+}
+
+int _word_check(char* collection[], char* str, int n) {
+    for (int k = 0; k < n; k++) {
+        char* temp_n = collection[k];
+        for (int i = 0; str[i] == temp_n[i] ; i++) {
+            if (str[i] == '\0') return (i == 0) ? -1 : k;
+        }        
+    }
+    return -1;
+}
+
+char* lastchar(char* str, register char c){
+    for (register int i = strlen(str); i >= 0 ; i--) {
+        if(str[i] == c) return &str[i];
+    }
+    return NULL;
+}
+
+// {WARNING / UNSAFE} BRUTE FORCE for calculating n of a string collection
+int _nstring_check(char* str[]) {
+    for (int retval = 0; 1 ; retval++) {
+        if(*str[retval] == '\0') return retval;
+    }
 }
